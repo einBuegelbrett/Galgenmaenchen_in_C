@@ -1,33 +1,15 @@
 #include <stdio.h> 
 
-int hauptspiel();
-void ausgabeHangman(int);
+void ausgabeHangman(int); 
 char *woerterliste[];
 
 int main()
 {
-  int versuchNummer = 1;
+    int versuchNummer = -1;
   ausgabeHangman(versuchNummer);
   printf("\n%s\n", woerterliste[1]);
-  hauptspiel();
-  return 0;
-}
 
-int hauptspiel()
-{
-  // wenn gewonnen gleich 1 ist, hat man gewonnen
-  int gewonnen = 0;
-  // gibt an, am wie vielten Versuch man ist
-  int versuchNummer = 0;
-  while(versuchNummer < 11 || gewonnen == 1)
-  {
-    // den Buchstaben den der User eingibt
-    char buchstabe;
-    printf("Gib ein Buchstaben an: ");
-    scanf("%1s", &buchstabe);
-    printf("%1s", &buchstabe);
-    gewonnen = 1;
-  }
+  return 0;
 }
 
 //ausgabe des Galgenmänchens nach je Fehleranzahl
