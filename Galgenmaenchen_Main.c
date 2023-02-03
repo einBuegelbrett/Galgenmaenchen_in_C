@@ -7,6 +7,7 @@ int hauptspiel();
 void ausgabeHangman(int);
 char * zufaelligesWort(char *liste[]);
 char *woerterliste[];
+void wortRückgabe(char *, char);
 
 int main()
 {
@@ -20,20 +21,18 @@ int hauptspiel() //Schnittpunkt von allem
   int gewonnen = 0;
   // gibt an, am wie vielten Versuch man ist
   int fehlerNummer = 0;
-  int laenge = strlen("Ralf");//länge des Wortes
-  zufaelligesWort(woerterliste);
+
+  char * wort = zufaelligesWort(woerterliste);
+  printf(wort);
   while(fehlerNummer < 11 && gewonnen == 0)
   {
-      for(int i = 0; i <= laenge; i++) //gibt die Striche und Buchstaben aus
-      {
-          printf("_");
-      }
-      printf("\n"); //nur zum formatieren der Ausgabe
+    printf("\n"); //nur zum formatieren der Ausgabe
     // den Buchstaben den der User eingibt
     char buchstabe;
     printf("Gib ein Buchstaben an: ");
-    scanf("%1s", buchstabe);
-    printf("%1s", &buchstabe);
+    scanf("%c", &buchstabe);
+    printf("%c", buchstabe);
+    wortRückgabe(wort, buchstabe);
     ausgabeHangman(fehlerNummer);
     gewonnen = 1;
   }
@@ -65,6 +64,29 @@ char * zufaelligesWort(char *liste[])
   int nummer = rand() % 656;
 
   return woerterliste[nummer];
+}
+
+void wortRückgabe(char * wort, char buchstabe) //Kontrolle ob Buchstabe richtig oder nicht
+{
+    int laenge = strlen(wort);//länge des Wortes
+
+    for(int i = 0; i <= laenge - 1; i++) //gibt die Striche und Buchstaben aus
+    {
+        char c = wort[i];
+
+       
+        if(c == buchstabe)
+        {
+           printf("%s",&buchstabe);
+
+        }
+        else
+        {
+
+            printf("_");
+        }
+    }
+    printf("\n");
 }
 
 char *woerterliste[] = {"Ärger", 
