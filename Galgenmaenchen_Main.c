@@ -1,31 +1,40 @@
 #include <stdio.h> 
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 int hauptspiel();
 void ausgabeHangman(int);
+char * zufaelligesWort(char *liste[]);
 char *woerterliste[];
 
 int main()
 {
-  int versuchNummer = 1;
-  ausgabeHangman(versuchNummer);
-  printf("\n%s\n", woerterliste[1]);
   hauptspiel();
   return 0;
 }
 
-int hauptspiel()
+int hauptspiel() //Schnittpunkt von allem
 {
   // wenn gewonnen gleich 1 ist, hat man gewonnen
   int gewonnen = 0;
   // gibt an, am wie vielten Versuch man ist
-  int versuchNummer = 0;
-  while(versuchNummer < 11 || gewonnen == 1)
+  int fehlerNummer = 0;
+  int laenge = strlen("Ralf");//länge des Wortes
+  zufaelligesWort(woerterliste);
+  while(fehlerNummer < 11 && gewonnen == 0)
   {
+      for(int i = 0; i <= laenge; i++) //gibt die Striche und Buchstaben aus
+      {
+          printf("_");
+      }
+      printf("\n"); //nur zum formatieren der Ausgabe
     // den Buchstaben den der User eingibt
     char buchstabe;
     printf("Gib ein Buchstaben an: ");
-    scanf("%1s", &buchstabe);
+    scanf("%1s", buchstabe);
     printf("%1s", &buchstabe);
+    ausgabeHangman(fehlerNummer);
     gewonnen = 1;
   }
 }
@@ -35,18 +44,27 @@ void ausgabeHangman(int versuchNummer)
 {
     switch(versuchNummer) {
         case(0):printf(""); break; //default Wert
-        case(1): printf("   _______\n _/       \\_\n");break;     /*1 print Hangman*/
+        case(1):printf("   _______\n _/       \\_\n");break;     /*1 print Hangman*/
         case(2):printf("      |\n      |\n      |\n   ___|___\n _/       \\_\n"); break;    /*2 print Hangman*/
-        case(3): printf("      |/\n      |\n      |\n   ___|___\n _/       \\_\n"); break;     /*3 print Hangman*/
-        case(4): printf("      _________\n      |/\n      |\n      |\n   ___|___\n _/       \\_\n"); break;    /*4 print Hangman*/
-        case(5): printf("      _________\n      |/      |\n      |\n      |\n   ___|___\n _/       \\_\n"); break;     /*5 print Hangman*/
+        case(3):printf("      |/\n      |\n      |\n   ___|___\n _/       \\_\n"); break;     /*3 print Hangman*/
+        case(4):printf("      _________\n      |/\n      |\n      |\n   ___|___\n _/       \\_\n"); break;    /*4 print Hangman*/
+        case(5):printf("      _________\n      |/      |\n      |\n      |\n   ___|___\n _/       \\_\n"); break;     /*5 print Hangman*/
         case(6):printf("      _________\n      |/      |\n      |      ( )\n      |\n   ___|___\n _/       \\_\n"); break;    /*6 print Hangman*/
         case(7):printf("      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___\n _/       \\_\n"); break;    /*7 print Hangman*/
         case(8):printf("      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___     \\\n _/       \\_\n"); break;    /*8 print Hangman*/
-        case(10): printf("      _________\n      |/      |\n      |      ( )\n      |       |\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*10 print Hangman*/
-        case(11): printf("      _________\n      |/      |\n      |      ( )\n      |      /|\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*11 print Hangman*/
+        case(10):printf("      _________\n      |/      |\n      |      ( )\n      |       |\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*10 print Hangman*/
+        case(11):printf("      _________\n      |/      |\n      |      ( )\n      |      /|\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*11 print Hangman*/
         default:printf("Fehler in der ausgabeHangman Funktion");
     }
+}
+
+// gibt ein zufälliges Wort zurück
+char * zufaelligesWort(char *liste[])
+{
+  srand(time(0));
+  int nummer = rand() % 656;
+
+  return woerterliste[nummer];
 }
 
 char *woerterliste[] = {"Ärger", 
