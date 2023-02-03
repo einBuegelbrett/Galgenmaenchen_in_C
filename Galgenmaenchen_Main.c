@@ -46,7 +46,7 @@ int hauptspiel() //Schnittpunkt von allem
     // den Buchstaben den der User eingibt
     char buchstabe;
     printf("Gib ein Buchstaben an: ");
-    scanf("%c", &buchstabe);
+    scanf(" %c", &buchstabe);
     wortRückgabe(wort, buchstabe, ertwortListe);
     buchstabenSpeicher(buchstabe, fehlerNummer, gerwortListe);
     ausgabeHangman(fehlerNummer);
@@ -97,13 +97,13 @@ char * wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrol
             gesetzteZahl++;
         }
     }
-    printf("%d\n",gesetzteZahl);
+    //printf("%d\n",gesetzteZahl);
 
     if(gesetzteZahl == 0)
     {
-        printf("%d\n", fehlerNummer);
+        //printf("%d\n", fehlerNummer);
         fehlerNummer++;
-        printf("%d\n", fehlerNummer);
+        //printf("%d\n", fehlerNummer);
     }
     for(int j = 0; j < laenge; j++)
     {
