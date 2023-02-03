@@ -5,9 +5,14 @@
 
 int hauptspiel();
 void ausgabeHangman(int);
-char * zufaelligesWort(char *liste[]);
-char *woerterliste[];
-void wortRückgabe(char *, char);
+char * zufaelligesWort(char *[]);
+char * woerterliste[];
+char * wortRückgabe(char *, char, char[]);
+char * buchstabenSpeicher(char, int, char []);
+int gewinnProbe(char[], int);
+void endNachricht(int);
+
+int fehlerNummer = 0;
 
 int main()
 {
@@ -17,24 +22,35 @@ int main()
 
 int hauptspiel() //Schnittpunkt von allem
 {
-  // wenn gewonnen gleich 1 ist, hat man gewonnen
-  int gewonnen = 0;
-  // gibt an, am wie vielten Versuch man ist
-  int fehlerNummer = 0;
+  char gerwortListe[11]; //Array für geratene Buchstaben
 
   char * wort = zufaelligesWort(woerterliste);
   printf(wort);
+
+  int laenge = strlen(wort);//länge des Wortes
+  
+  char ertwortListe[laenge];//Array mit erratenen Buchstaben
+  for(int i = 0; i < laenge; i++)
+  {
+    ertwortListe[i] = '_';
+  }
+  printf("\n");
+  printf(ertwortListe);
+  // wenn gewonnen gleich 1 ist, hat man gewonnen
+  int gewonnen = gewinnProbe(ertwortListe, laenge);
+
   while(fehlerNummer < 11 && gewonnen == 0)
   {
+    printf("%d", fehlerNummer);
     printf("\n"); //nur zum formatieren der Ausgabe
     // den Buchstaben den der User eingibt
     char buchstabe;
     printf("Gib ein Buchstaben an: ");
     scanf("%c", &buchstabe);
-    printf("%c", buchstabe);
-    wortRückgabe(wort, buchstabe);
+    wortRückgabe(wort, buchstabe, ertwortListe);
+    buchstabenSpeicher(buchstabe, fehlerNummer, gerwortListe);
     ausgabeHangman(fehlerNummer);
-    gewonnen = 1;
+    gewonnen = gewinnProbe(ertwortListe, laenge);
   }
 }
 
@@ -66,27 +82,67 @@ char * zufaelligesWort(char *liste[])
   return woerterliste[nummer];
 }
 
-void wortRückgabe(char * wort, char buchstabe) //Kontrolle ob Buchstabe richtig oder nicht
+char * wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrolle ob Buchstabe richtig oder nicht
 {
     int laenge = strlen(wort);//länge des Wortes
+    int gesetzteZahl = 0;
 
-    for(int i = 0; i <= laenge - 1; i++) //gibt die Striche und Buchstaben aus
+    for(int i = 0; i < laenge; i++) //gibt die Striche und Buchstaben aus
     {
         char c = wort[i];
-
        
-        if(c == buchstabe)
-        {
-           printf("%s",&buchstabe);
-
-        }
-        else
-        {
-
-            printf("_");
+        if (c == buchstabe) {
+            //printf("%s",&buchstabe);
+            ertwortListe[i] = buchstabe;
+            gesetzteZahl++;
         }
     }
+    printf("%d\n",gesetzteZahl);
+
+    if(gesetzteZahl == 0)
+    {
+        printf("%d\n", fehlerNummer);
+        fehlerNummer++;
+        printf("%d\n", fehlerNummer);
+    }
+    for(int j = 0; j < laenge; j++)
+    {
+      printf("%c",ertwortListe[j] );
+    }
     printf("\n");
+    return ertwortListe;
+}
+
+char * buchstabenSpeicher(char buchstabe, int fehlerNummer, char gerwortListe[])
+{
+    gerwortListe[fehlerNummer] = buchstabe;
+    printf(gerwortListe);
+    return gerwortListe;
+}
+
+int gewinnProbe(char liste[],int laenge)
+{
+
+    for(int i = 0; i < laenge; i++)
+    {
+        if(liste[i] == '_')
+        {
+            return 0;
+        }
+
+    }
+    return 1;
+}
+void endNachricht(int ergebnis)
+{
+    if(ergebnis == 1)
+    {
+        printf("Sie haben gewonnen");
+    }
+    else
+    {
+        printf("Sie haben verloren");
+    }
 }
 
 char *woerterliste[] = {"Ärger", 
@@ -323,7 +379,6 @@ char *woerterliste[] = {"Ärger",
 "Glückwunsch",
 "Glas",
 "Gleis",
-"Goethe-Institut",
 "Größe",
 "Die Grenze",
 "Grippe",
