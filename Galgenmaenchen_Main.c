@@ -65,23 +65,29 @@ int hauptspiel(FILE * fp, char * datScore) //Schnittpunkt von allem
     char buchstabe;
     do
     {
-        printf("\n-------------------------------\n");
-        printf(ertwortListe);
+        printf("\n###########################################################\n");
         printf("\nVersuch %d\n", versuch);
-        printf("\n[");
-        for(int i = 0; i < strlen(gerwortListe); i++)
+        ausgabeHangman(fehlerNummer);
+        for(int i = 0; i < strlen(wort); i++)
         {
-            printf("%c " ,gerwortListe[i]);
+            printf("%c", ertwortListe[i]);
         }
-        printf("]\n");
 
-        printf("Gib ein Buchstaben an: ");
+        printf("\n\n[");
+
+        for(int i = 0; i < 26; i++)
+        {
+            printf("%c ", gerwortListe[i]);
+        }
+
+        printf("]\n\n");
+
+        printf("Gib einen Buchstaben an: ");
         scanf(" %c", &buchstabe);
     } while(buchstabenKontrolle(buchstabe, gerwortListe, laenge));
 
     wortRückgabe(wort, buchstabe, ertwortListe);
     buchstabenSpeicher(buchstabe, gerwortListe);
-    ausgabeHangman(fehlerNummer);
     gewonnen = gewinnProbe(ertwortListe, laenge);
     versuch++;
   }
@@ -94,17 +100,17 @@ void ausgabeHangman(int versuchNummer)
 {
     switch(versuchNummer) {
         case(0):printf(""); break; //default Wert
-        case(1):printf("   _______\n _/       \\_\n");break;     /*1 print Hangman*/
-        case(2):printf("      |\n      |\n      |\n   ___|___\n _/       \\_\n"); break;    /*2 print Hangman*/
-        case(3):printf("      |/\n      |\n      |\n   ___|___\n _/       \\_\n"); break;     /*3 print Hangman*/
-        case(4):printf("      _________\n      |/\n      |\n      |\n   ___|___\n _/       \\_\n"); break;    /*4 print Hangman*/
-        case(5):printf("      _________\n      |/      |\n      |\n      |\n   ___|___\n _/       \\_\n"); break;     /*5 print Hangman*/
-        case(6):printf("      _________\n      |/      |\n      |      ( )\n      |\n   ___|___\n _/       \\_\n"); break;    /*6 print Hangman*/
-        case(7):printf("      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___\n _/       \\_\n"); break;    /*7 print Hangman*/
-        case(8):printf("      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___     \\\n _/       \\_\n"); break;    /*8 print Hangman*/
-        case(9):printf("      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___   / \\\n _/       \\_\n"); break;    /*9 print Hangman*/
-        case(10):printf("      _________\n      |/      |\n      |      ( )\n      |       |\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*10 print Hangman*/
-        case(11):printf("      _________\n      |/      |\n      |      ( )\n      |      /|\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*11 print Hangman*/
+        case(1):printf("\n   _______\n _/       \\_\n\n");break;     /*1 print Hangman*/
+        case(2):printf("\n      |\n      |\n      |\n   ___|___\n _/       \\_\n\n"); break;    /*2 print Hangman*/
+        case(3):printf("\n      |/\n      |\n      |\n   ___|___\n _/       \\_\n\n"); break;     /*3 print Hangman*/
+        case(4):printf("\n      _________\n      |/\n      |\n      |\n   ___|___\n _/       \\_\n\n"); break;    /*4 print Hangman*/
+        case(5):printf("\n      _________\n      |/      |\n      |\n      |\n   ___|___\n _/       \\_\n\n"); break;     /*5 print Hangman*/
+        case(6):printf("\n      _________\n      |/      |\n      |      ( )\n      |\n   ___|___\n _/       \\_\n\n"); break;    /*6 print Hangman*/
+        case(7):printf("\n      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___\n _/       \\_\n\n"); break;    /*7 print Hangman*/
+        case(8):printf("\n      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___     \\\n _/       \\_\n\n"); break;    /*8 print Hangman*/
+        case(9):printf("\n      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___   / \\\n _/       \\_\n\n"); break;    /*9 print Hangman*/
+        case(10):printf("\n      _________\n      |/      |\n      |      ( )\n      |       |\\\n   ___|___   / \\\n _/       \\_\n\n"); break;    /*10 print Hangman*/
+        case(11):printf("\n      _________\n      |/      |\n      |      ( )\n      |      /|\\\n   ___|___   / \\\n _/       \\_\n\n"); break;    /*11 print Hangman*/
         default:printf("Fehler in der ausgabe Hangman Funktion");
     }
 }
@@ -168,7 +174,7 @@ void endNachricht(int ergebnis, FILE * fp, char * wort)
 {
     if(ergebnis == 1)
     {
-        printf("Sie haben gewonnen");
+        printf("Sie haben gewonnen !");
     }
     else
     {
