@@ -1,7 +1,7 @@
 #include <stdio.h> 
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
+#include <string.h>
 #include <stdbool.h>
 
 int hauptspiel();
@@ -24,41 +24,42 @@ int main()
 
 int hauptspiel() //Schnittpunkt von allem
 {
+
   char gerwortListe[11]; //Array für geratene Buchstaben
 
   char * wort = zufaelligesWort(woerterliste);
-  printf(wort);
+  printf(wort);                                         //Kommt weg
 
-  int laenge = strlen(wort);//länge des Wortes
-  char ertwortListe[laenge];//Array mit erratenen Buchstaben
+    int laenge = strlen(wort);//länge des Wortes
 
-  for(int i = 0; i < laenge; i++)
-  {
-    ertwortListe[i] = '_';
-  }
-  printf("\n");
-  printf(ertwortListe);
-  // wenn gewonnen gleich 1 ist, hat man gewonnen
-  int gewonnen = gewinnProbe(ertwortListe, laenge);
-
+    char ertwortListe[laenge];//Array mit erratenen Buchstaben
+    for(int i = 0; i < laenge; i++)
+    {
+        ertwortListe[i] = '_';
+    }
+    printf("\n");
+    printf(ertwortListe);
+    // wenn gewonnen gleich 1 ist, hat man gewonnen
+    int gewonnen = gewinnProbe(ertwortListe, laenge);
   while(fehlerNummer < 11 && gewonnen == 0)
   {
-    //printf("%d", fehlerNummer);
-    //printf("\n"); //nur zum formatieren der Ausgabe
+     // printf("%d", fehlerNummer);
+      //printf("\n"); //nur zum formatieren der Ausgabe
     // den Buchstaben den der User eingibt
     char buchstabe;
     do
     {
         printf("Gib ein Buchstaben an: ");
         scanf(" %c", &buchstabe);
-    } while(buchstabenKontrolle(buchstabe, gerwortListe, laenge));
+    }
+            while(buchstabenKontrolle(buchstabe, gerwortListe, laenge));
 
-    wortRückgabe(wort, buchstabe, ertwortListe);
-    buchstabenSpeicher(buchstabe, fehlerNummer, gerwortListe);
+      wortRückgabe(wort, buchstabe,ertwortListe);
+      buchstabenSpeicher(buchstabe, fehlerNummer, gerwortListe);
     ausgabeHangman(fehlerNummer);
     gewonnen = gewinnProbe(ertwortListe, laenge);
   }
-  endNachricht(gewonnen);
+    endNachricht(gewonnen);
 }
 
 //ausgabe des Galgenmänchens nach je Fehleranzahl
@@ -76,7 +77,7 @@ void ausgabeHangman(int versuchNummer)
         case(8):printf("      _________\n      |/      |\n      |      ( )\n      |       |\n   ___|___     \\\n _/       \\_\n"); break;    /*8 print Hangman*/
         case(10):printf("      _________\n      |/      |\n      |      ( )\n      |       |\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*10 print Hangman*/
         case(11):printf("      _________\n      |/      |\n      |      ( )\n      |      /|\\\n   ___|___   / \\\n _/       \\_\n"); break;    /*11 print Hangman*/
-        default:printf("Fehler in der ausgabe Hangman Funktion");
+        default:printf("Fehler in der ausgabeHangman Funktion");
     }
 }
 
@@ -89,34 +90,37 @@ char * zufaelligesWort(char *liste[])
   return woerterliste[nummer];
 }
 
-char * wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrolle ob Buchstabe richtig oder nicht
+char *wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrolle ob Buchstabe richtig oder nicht
 {
     int laenge = strlen(wort);//länge des Wortes
     int gesetzteZahl = 0;
 
-    for(int i = 0; i < laenge; i++) //gibt die Striche und Buchstaben aus
+    for(int i = 0; i <= laenge - 1; i++) //gibt die Striche und Buchstaben aus
     {
         char c = wort[i];
-       
+
+
         if (c == buchstabe) {
             //printf("%s",&buchstabe);
             ertwortListe[i] = buchstabe;
             gesetzteZahl++;
+
         }
+
     }
-    //printf("%d\n",gesetzteZahl);
+    printf("%d\n",gesetzteZahl);
 
     if(gesetzteZahl == 0)
     {
         fehlerNummer++;
     }
-
     for(int j = 0; j < laenge; j++)
     {
-      printf("%c",ertwortListe[j]);
+        printf("%c",ertwortListe[j] );
     }
     printf("\n");
     return ertwortListe;
+
 }
 
 char * buchstabenSpeicher(char buchstabe, int fehlerNummer, char gerwortListe[])
@@ -125,19 +129,19 @@ char * buchstabenSpeicher(char buchstabe, int fehlerNummer, char gerwortListe[])
     //printf(gerwortListe);
     return gerwortListe;
 }
-
 int gewinnProbe(char liste[],int laenge)
 {
+
     for(int i = 0; i < laenge; i++)
     {
         if(liste[i] == '_')
         {
             return 0;
         }
+
     }
     return 1;
 }
-
 void endNachricht(int ergebnis)
 {
     if(ergebnis == 1)
@@ -152,143 +156,151 @@ void endNachricht(int ergebnis)
 
 bool buchstabenKontrolle(char buchstabe, char Liste[],int laenge)
 {
-    for(int i = 0; i < laenge; i++)
+
+for(int i = 0; i < laenge; i++)
+{
+
+    if(buchstabe == Liste[i])
     {
-        if(buchstabe == Liste[i])
-        {
-            return true;
-        }
+
+        return true;
     }
-    return false;
 }
+
+        return false;
+}
+
 
 char *woerterliste[] = {"Ärger", 
 "Ärztin",
-"abend",
-"abfahrt",
-"abflug",
-"absender",
-"adresse",
-"alkohol",
-"alter",
-"ampel",
-"anfang",
-"angebot",
-"angestellte",
-"angst",
-"ankunft",
-"anmeldung",
-"anrede",
-"anruf",
-"anrufbeantworter",
-"ansage",
-"anschluss",
-"antwort",
-"anzeige",
-"anzug",
-"apfel",
-"apotheke",
-"appartement",
-"appetit",
-"april",
-"arbeit",
-"arbeitsplatz",
-"arm",
-"arzt",
-"aufenthalt",
-"aufgabe",
-"aufzug",
-"auge",
-"august",
-"ausbildung",
-"ausflug",
-"ausgang",
-"auskunft",
-"ausländer",
-"ausländerin",
-"ausland",
-"aussage",
-"ausstellung",
-"ausweis",
-"auto",
-"autobahn",
-"automat",
-"bäckerei",
-"büro",
-"baby",
-"bad",
-"bahn",
-"bahnhof",
-"bahnsteig",
-"balkon",
-"banane",
-"bank",
-"batterie",
-"baum",
-"beamte",
-"beamtin",
-"bein",
-"beispiel",
-"bekannte",
-"benzin",
-"beratung",
-"berg",
-"beruf",
-"berufsschule",
-"besuch",
-"betrag",
-"bett",
-"bewerbung",
-"bier",
-"bild",
-"bildschirm",
-"birne",
-"bitte",
-"blatt",
-"bleistift",
-"blick",
-"blume",
-"bluse",
-"blut",
-"bogen",
-"bohne",
-"brötchen",
-"brücke",
-"brief",
-"briefkasten",
-"briefmarke",
-"brieftasche",
-"briefumschlag",
-"brille",
-"brot",
-"bruder",
-"buch",
-"buchstabe",
-"bus",
-"butter",
-"café",
-"chef",
-"computer",
-"creme",
-"dach",
-"dame",
-"dank",
-"datum",
-"dauer",
-"deutsche",
-"dezember",
-"dienstag",
-"ding",
-"disco",
-"doktor",
-"dom",
-"donnerstag",
-"doppelzimmer",
-"dorf",
-"drucker",
-"durchsage",
-"durst",
-"dusche",
+"Abend",
+"Abfahrt",
+"Abflug",
+"Absender",
+"Adresse",
+"Alkohol",
+"Alter",
+"Ampel",
+"Anfang",
+"Angebot",
+"Angestellte",
+"Angst",
+"Ankunft",
+"Anmeldung",
+"Anrede",
+"Anruf",
+"Anrufbeantworter",
+"Ansage",
+"Anschluss",
+"Antwort",
+"Anzeige",
+"Anzug",
+"Apfel",
+"Apotheke",
+"Appartement",
+"Appetit",
+"April",
+"Arbeit",
+"Arbeitsplatz",
+"Arm",
+"Arzt",
+"Aufenthalt",
+"Aufgabe",
+"Aufzug",
+"Auge",
+"August",
+"Ausbildung",
+"Ausflug",
+"Ausgang",
+"Auskunft",
+"Ausländer",
+"Ausländerin",
+"Ausland",
+"Aussage",
+"Ausstellung",
+"Ausweis",
+"Auto",
+"Autobahn",
+"Automat",
+"Bäckerei",
+"Büro",
+"Baby",
+"Bad",
+"Bahn",
+"Bahnhof",
+"Bahnsteig",
+"Balkon",
+"Banane",
+"Bank",
+"Batterie",
+"Baum",
+"Beamte",
+"Beamtin",
+"Bein",
+"Beispiel",
+"Bekannte",
+"Benzin",
+"Beratung",
+"Berg",
+"Beruf",
+"Berufsschule",
+"Besuch",
+"Betrag",
+"Bett",
+"Bewerbung",
+"Bier",
+"Bild",
+"Bildschirm",
+"Birne",
+"Bitte",
+"Blatt",
+"Bleistift",
+"Blick",
+"Blume",
+"Bluse",
+"Blut",
+"Bogen",
+"Bohne",
+"Brötchen",
+"Brücke",
+"Brief",
+"Briefkasten",
+"Briefmarke",
+"Brieftasche",
+"Briefumschlag",
+"Brille",
+"Brot",
+"Bruder",
+"Buch",
+"Buchstabe",
+"Bus",
+"Butter",
+"Café",
+"CD",
+"CD-ROM",
+"Chef",
+"Computer",
+"Creme",
+"Dach",
+"Dame",
+"Dank",
+"Datum",
+"Dauer",
+"Deutsche",
+"Dezember",
+"Dienstag",
+"Ding",
+"Disco",
+"Doktor",
+"Dom",
+"Donnerstag",
+"Doppelzimmer",
+"Dorf",
+"Drucker",
+"Durchsage",
+"Durst",
+"Dusche",
+"E-Mail",
 "Ecke",
 "Ehefrau",
 "Ehemann",
@@ -393,6 +405,7 @@ char *woerterliste[] = {"Ärger",
 "Glückwunsch",
 "Glas",
 "Gleis",
+"Goethe-Institut",
 "Größe",
 "Die Grenze",
 "Grippe",
