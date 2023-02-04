@@ -12,3 +12,4 @@ Versuche: 14 ; Wort: tomate
 Versuche: 14 ; Wort: buero
 Versuche: 16 ; Wort: fahrplan
 Versuche: 17 ; Wort: grundschule
+Versuche: 11 ; Wort: karte

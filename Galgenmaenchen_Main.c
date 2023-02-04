@@ -178,6 +178,7 @@ void endNachricht(int ergebnis, FILE * fp, char * wort)
     }
     else
     {
+        ausgabeHangman(fehlerNummer);
         printf("Sie haben verloren.\nDas Wort war: %s\n", wort);
     }
     fprintf(fp, "Versuche: %d ; Wort: %s\n", versuch, wort);
