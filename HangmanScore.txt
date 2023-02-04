@@ -1,0 +1,7 @@
+Versuche: 9 ; Wort: fahrer
+Versuche: 12 ; Wort: kuehlschrank
+Versuche: 19 ; Wort: sprechstunde
+Versuche: 12 ; Wort: tankstelle
+Versuche: 12 ; Wort: bahn
+Versuche: 6 ; Wort: bett
+Versuche: 12 ; Wort: gemuese

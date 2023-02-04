@@ -4,15 +4,15 @@
 #include <time.h>
 #include <stdbool.h>
 
-int hauptspiel();
+int hauptspiel(FILE *, char *);
 void ausgabeHangman(int);
 char * zufaelligesWort(char *[]);
 char * woerterliste[];
 char * wortRückgabe(char *, char, char[]);
-char * buchstabenSpeicher(char, char []);
+char * buchstabenSpeicher(char, char[]);
 int gewinnProbe(char[], int);
-void endNachricht(int);
-bool buchstabenKontrolle(char, char [], int );
+void endNachricht(int, FILE *, char *);
+bool buchstabenKontrolle(char, char [], int);
 
 int fehlerNummer = 0;
 
@@ -20,39 +20,47 @@ int versuch = 1;
 
 int main()
 {
-  hauptspiel();
-  return 0;
+    FILE * fp;
+    char * datScores = "HangmanScore.txt";
+
+    hauptspiel(fp, datScores);
+    return 0;
 }
 
-int hauptspiel() //Schnittpunkt von allem
+int hauptspiel(FILE * fp, char * datScore) //Schnittpunkt von allem
 {
-  char gerwortListe[26]; //Array für geratene Buchstaben
+    fp = fopen(datScore, "a");
+    if(fp == NULL)
+    {
+        fprintf(stderr,"Fehler beim öffnen der Datei %s\n", datScore);
+        return EXIT_FAILURE;
+    }
 
-  char * wort = zufaelligesWort(woerterliste);
-  printf(wort);
+    char gerwortListe[26]; //Array für geratene Buchstaben
 
-  int laenge = strlen(wort);//länge des Wortes
-  char ertwortListe[laenge];//Array mit erratenen Buchstaben
+    char * wort = zufaelligesWort(woerterliste);
+    //printf(wort);
 
-  for(int i = 0; i < laenge; i++)
-  {
-    ertwortListe[i] = '_';
-  }
+    int laenge = strlen(wort);//länge des Wortes
+    char ertwortListe[laenge];//Array mit erratenen Buchstaben
 
-  for(int i = 0; i < 11; i++)
-  {
-    gerwortListe[i] = ' ';
-  }
+    for(int i = 0; i < laenge; i++)
+    {
+        ertwortListe[i] = '_';
+    }
 
-  printf("\n");
-  //printf(ertwortListe);
-  // wenn gewonnen gleich 1 ist, hat man gewonnen
-  int gewonnen = gewinnProbe(ertwortListe, laenge);
+    for(int i = 0; i < 26; i++)
+    {
+        gerwortListe[i] = ' ';
+    }
+
+    printf("\n");
+    
+    // wenn gewonnen gleich 1 ist, hat man gewonnen
+    int gewonnen = gewinnProbe(ertwortListe, laenge);
 
   while(fehlerNummer < 11 && gewonnen == 0)
   {
-    //printf("%d", fehlerNummer);
-    //printf("\n"); //nur zum formatieren der Ausgabe
     // den Buchstaben den der User eingibt
     char buchstabe;
     do
@@ -77,7 +85,8 @@ int hauptspiel() //Schnittpunkt von allem
     gewonnen = gewinnProbe(ertwortListe, laenge);
     versuch++;
   }
-  endNachricht(gewonnen);
+  endNachricht(gewonnen, fp, wort);
+  fclose(fp);
 }
 
 //ausgabe des Galgenmänchens nach je Fehleranzahl
@@ -104,7 +113,7 @@ void ausgabeHangman(int versuchNummer)
 char * zufaelligesWort(char *liste[])
 {
   srand(time(0));
-  int nummer = rand() % 656;
+  int nummer = rand() % 648;
 
   return woerterliste[nummer];
 }
@@ -119,12 +128,10 @@ char * wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrol
         char c = wort[i];
        
         if (c == buchstabe) {
-            //printf("%s",&buchstabe);
             ertwortListe[i] = buchstabe;
             gesetzteZahl++;
         }
     }
-    //printf("%d\n",gesetzteZahl);
 
     if(gesetzteZahl == 0)
     {
@@ -142,13 +149,6 @@ char * wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrol
 char * buchstabenSpeicher(char buchstabe, char gerwortListe[])
 {
     gerwortListe[versuch - 1] = buchstabe;
-    //printf(gerwortListe);
-    /*
-    for(int i = 0; i < strlen(gerwortListe); i++)
-    {
-        printf("%c", gerwortListe[i]);
-    }
-    */
     return gerwortListe;
 }
 
@@ -164,7 +164,7 @@ int gewinnProbe(char liste[],int laenge)
     return 1;
 }
 
-void endNachricht(int ergebnis)
+void endNachricht(int ergebnis, FILE * fp, char * wort)
 {
     if(ergebnis == 1)
     {
@@ -172,8 +172,9 @@ void endNachricht(int ergebnis)
     }
     else
     {
-        printf("Sie haben verloren");
+        printf("Sie haben verloren.\nDas Wort war: %s\n", wort);
     }
+    fprintf(fp, "Versuche: %d ; Wort: %s\n", versuch, wort);
 }
 
 bool buchstabenKontrolle(char buchstabe, char Liste[],int laenge)
@@ -188,7 +189,7 @@ bool buchstabenKontrolle(char buchstabe, char Liste[],int laenge)
     return false;
 }
 
-char *woerterliste[] = {"Ärger", 
+char *woerterliste[] = {"aerger", 
 "aerztin",
 "abend",
 "abfahrt",
@@ -230,8 +231,8 @@ char *woerterliste[] = {"Ärger",
 "ausflug",
 "ausgang",
 "auskunft",
-"ausländer",
-"ausländerin",
+"auslaender",
+"auslaenderin",
 "ausland",
 "aussage",
 "ausstellung",
@@ -239,7 +240,7 @@ char *woerterliste[] = {"Ärger",
 "auto",
 "autobahn",
 "automat",
-"bäckerei",
+"baeckerei",
 "buero",
 "baby",
 "bad",
@@ -278,8 +279,8 @@ char *woerterliste[] = {"Ärger",
 "blut",
 "bogen",
 "bohne",
-"brötchen",
-"brücke",
+"broetchen",
+"bruecke",
 "brief",
 "briefkasten",
 "briefmarke",
@@ -326,7 +327,7 @@ char *woerterliste[] = {"Ärger",
 "einzelzimmer",
 "eis",
 "eltern",
-"empfänger",
+"empfaenger",
 "empfang",
 "ende",
 "enkel",
@@ -335,7 +336,7 @@ char *woerterliste[] = {"Ärger",
 "erfahrung",
 "ergebnis",
 "erlaubnis",
-"ermäßigung",
+"ermaeßigung",
 "erwachsene",
 "essen",
 "export",
@@ -356,7 +357,7 @@ char *woerterliste[] = {"Ärger",
 "fehler",
 "fenster",
 "ferien",
-"fernsehgerät",
+"fernsehgeraet",
 "fest",
 "feuer",
 "feuerwehr",
@@ -414,11 +415,11 @@ char *woerterliste[] = {"Ärger",
 "getraenk",
 "gewicht",
 "gewitter",
-"glück",
-"glückwunsch",
+"glueck",
+"glueckwunsch",
 "glas",
 "gleis",
-"größe",
+"groeße",
 "grenze",
 "grippe",
 "großeltern",
@@ -429,7 +430,7 @@ char *woerterliste[] = {"Ärger",
 "gruppe",
 "guthaben",
 "gymnasium",
-"hähnchen",
+"haehnchen",
 "haar",
 "halbpension",
 "halle",
@@ -471,11 +472,11 @@ char *woerterliste[] = {"Ärger",
 "juli",
 "junge",
 "juni",
-"käse",
-"körper",
-"küche",
-"kühlschrank",
-"kündigung",
+"kaese",
+"koerper",
+"kueche",
+"kuehlschrank",
+"kuendigung",
 "kaffee",
 "kalender",
 "kamera",
@@ -523,8 +524,8 @@ char *woerterliste[] = {"Ärger",
 "kunde",
 "kundin",
 "kurs",
-"löffel",
-"lösung",
+"loeffel",
+"loesung",
 "laden",
 "lager",
 "lampe",
@@ -545,11 +546,11 @@ char *woerterliste[] = {"Ärger",
 "lokal",
 "luft",
 "lust",
-"mädchen",
-"märz",
-"möbel",
-"müll",
-"mülltonne",
+"maedchen",
+"maerz",
+"moebel",
+"muell",
+"muelltonne",
 "magen",
 "mai",
 "mal",
@@ -586,7 +587,7 @@ char *woerterliste[] = {"Ärger",
 "museum",
 "musik",
 "mutter",
-"nähe",
+"naehe",
 "nachbar",
 "nachbarin",
 "nachmittag",
@@ -614,12 +615,12 @@ char *woerterliste[] = {"Ärger",
 "ort",
 "osten",
 "oel",
-"päckchen",
+"paeckchen",
 "paket",
 "panne",
 "papier",
 "papiere",
-"parfüm",
+"parfuem",
 "park",
 "partei",
 "partner",
@@ -636,7 +637,7 @@ char *woerterliste[] = {"Ärger",
 "portion",
 "post",
 "postleitzahl",
-"prüfung",
+"pruefung",
 "praktikum",
 "praxis",
 "preis",
@@ -645,9 +646,9 @@ char *woerterliste[] = {"Ärger",
 "programm",
 "prospekt",
 "pullover",
-"qualität",
+"qualitaet",
 "quittung",
-"rücken",
+"ruecken",
 "rabatt",
 "radio",
 "rathaus",
@@ -661,8 +662,8 @@ char *woerterliste[] = {"Ärger",
 "reinigung",
 "reis",
 "reise",
-"reisebüro",
-"reiseführer",
+"reisebuero",
+"reisefuehrer",
 "reparatur",
 "restaurant",
 "rezept",
@@ -671,21 +672,21 @@ char *woerterliste[] = {"Ärger",
 "rock",
 "rose",
 "rundgang",
-"süden",
+"sueden",
 "sache",
 "saft",
 "salat",
 "salz",
 "satz",
-"schüler",
-"schülerin",
+"schueler",
+"schuelerin",
 "schalter",
 "scheckkarte",
 "schiff",
 "schild",
 "schinken",
 "schirm",
-"schlüssel",
+"schluessel",
 "schloss",
 "schluss",
 "schmerzen",
@@ -699,9 +700,9 @@ char *woerterliste[] = {"Ärger",
 "schwester",
 "schwimmbad",
 "see",
-"sehenswürdigkeit",
+"sehenswuerdigkeit",
 "seife",
-"sekretärin",
+"sekretaerin",
 "sekunde",
 "sendung",
 "senioren",
@@ -715,7 +716,7 @@ char *woerterliste[] = {"Ärger",
 "sonne",
 "sonntag",
 "sorge",
-"spülmaschine",
+"spuelmaschine",
 "spaß",
 "spaziergang",
 "speisekarte",
@@ -723,7 +724,7 @@ char *woerterliste[] = {"Ärger",
 "sprache",
 "sprachschule",
 "sprechstunde",
-"stück",
+"stueck",
 "stadt",
 "standesamt",
 "stempel",
@@ -742,14 +743,13 @@ char *woerterliste[] = {"Ärger",
 "stunde",
 "supermarkt",
 "suppe",
-"tür",
-"tüte",
+"tuer",
+"tuete",
 "tag",
 "tankstelle",
 "tasche",
 "tasse",
 "taxi",
-"ter Tee",
 "teil",
 "telefon",
 "telefonbuch",
@@ -774,7 +774,7 @@ char *woerterliste[] = {"Ärger",
 "turm",
 "uhr",
 "unfall",
-"universität",
+"universitaet",
 "unterhaltung",
 "unterkunft",
 "unterricht",
@@ -786,12 +786,12 @@ char *woerterliste[] = {"Ärger",
 "vater",
 "verbindung",
 "verein",
-"verkäufer",
-"verkäuferin",
+"verkaeufer",
+"verkaeuferin",
 "verkehr",
 "vermieter",
 "versicherung",
-"verspätung",
+"verspaetung",
 "vertrag",
 "video",
 "vogel",
@@ -800,7 +800,7 @@ char *woerterliste[] = {"Ärger",
 "vorname",
 "vorsicht",
 "vorwahl",
-"wäsche",
+"waesche",
 "wagen",
 "wald",
 "wasser",
@@ -811,7 +811,7 @@ char *woerterliste[] = {"Ärger",
 "werkzeug",
 "westen",
 "wetter",
-"wiederhören",
+"wiederhoeren",
 "wiedersehen",
 "wind",
 "winter",
