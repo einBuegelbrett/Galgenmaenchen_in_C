@@ -14,12 +14,13 @@ int gewinnProbe(char[], int);
 void endNachricht(int, FILE *, char *);
 bool buchstabenKontrolle(char, char [], int);
 
+// globale Variablen
 int fehlerNummer = 0;
-
 int versuch = 1;
 
 int main()
 {
+    // Die Variablen fürs öffnen der Datei wird angelegt
     FILE * fp;
     char * datScores = "HangmanScore.txt";
 
@@ -29,7 +30,10 @@ int main()
 
 int hauptspiel(FILE * fp, char * datScore) //Schnittpunkt von allem
 {
+    // öffnen der Dater
     fp = fopen(datScore, "a");
+
+    // gibt eine Fehlernachricht zurück falls es einen Fehler beim öffnen der Datei gab
     if(fp == NULL)
     {
         fprintf(stderr,"Fehler beim öffnen der Datei %s\n", datScore);
@@ -38,68 +42,81 @@ int hauptspiel(FILE * fp, char * datScore) //Schnittpunkt von allem
 
     char gerwortListe[26]; //Array für geratene Buchstaben
 
-    char * wort = zufaelligesWort(woerterliste);
-    //printf(wort);
+    char * wort = zufaelligesWort(woerterliste); // wählt ein zufälliges Wort aus
 
     int laenge = strlen(wort);//länge des Wortes
     char ertwortListe[laenge];//Array mit erratenen Buchstaben
 
+    // Füllt die Eratenenbuchstabenliste mit Unterstrichen voll 
     for(int i = 0; i < laenge; i++)
     {
         ertwortListe[i] = '_';
     }
 
+    // Reserviert die Plätze (es behebt einen bug der beim printen der Liste manchmal andere Zeichen zeigt)
     for(int i = 0; i < 26; i++)
     {
         gerwortListe[i] = ' ';
     }
 
+    // Zeilenumbruch zur besseren veranschaulischung
     printf("\n");
     
     // wenn gewonnen gleich 1 ist, hat man gewonnen
     int gewonnen = gewinnProbe(ertwortListe, laenge);
 
-  while(fehlerNummer < 11 && gewonnen == 0)
-  {
-    // den Buchstaben den der User eingibt
-    char buchstabe;
-    do
+    // Die Schleife in dem das Spiel passiert, bei 11 fehlern verliert man, wenn gewonnen gleich 1 ist gewinnt man
+    while(fehlerNummer < 11 && gewonnen == 0)
     {
-        printf("\n###########################################################\n");
-        printf("\nVersuch %d\n", versuch);
-        ausgabeHangman(fehlerNummer);
-        for(int i = 0; i < strlen(wort); i++)
+        // Buchstaben den der User eingibt
+        char buchstabe;
+
+        // Die Schleife printet das Spiel aus und fragt nach dem Buchstaben ab, falls er schon benutzt wurde, wird die Schleife wiederholt
+        do
         {
-            printf("%c", ertwortListe[i]);
-        }
+            // printet die benötigten informationen aus
+            printf("\n###########################################################\n");
+            printf("\nVersuch %d\n", versuch);
+            ausgabeHangman(fehlerNummer);
 
-        printf("\n\n[");
+            // Gibt die Erateneliste aus
+            for(int i = 0; i < strlen(wort); i++)
+            {
+                printf("%c", ertwortListe[i]);
+            }
 
-        for(int i = 0; i < 26; i++)
-        {
-            printf("%c ", gerwortListe[i]);
-        }
+            printf("\n\n["); // Start der Liste (zur besseren veranschaulischung)
 
-        printf("]\n\n");
+            // Gibt die Gerateneliste aus
+            for(int i = 0; i < 26; i++)
+            {
+                printf("%c ", gerwortListe[i]);
+            }
 
-        printf("Gib einen Buchstaben an: ");
-        scanf(" %c", &buchstabe);
-    } while(buchstabenKontrolle(buchstabe, gerwortListe, laenge));
+            printf("]\n\n"); // Ende der Liste
 
-    wortRückgabe(wort, buchstabe, ertwortListe);
-    buchstabenSpeicher(buchstabe, gerwortListe);
-    gewonnen = gewinnProbe(ertwortListe, laenge);
-    versuch++;
-  }
-  endNachricht(gewonnen, fp, wort);
-  fclose(fp);
-}
+            // macht die Buchstabenanfrage
+            printf("Gib einen Buchstaben an: ");
+            scanf(" %c", &buchstabe);
+        } while(buchstabenKontrolle(buchstabe, gerwortListe, laenge));
+
+        //führt die verschiedene Proben aus
+        wortRückgabe(wort, buchstabe, ertwortListe);
+        buchstabenSpeicher(buchstabe, gerwortListe);
+        gewonnen = gewinnProbe(ertwortListe, laenge);
+
+        // Jeder Versuch wird in der globalen Variable gespeichert
+        versuch++;
+    }
+    endNachricht(gewonnen, fp, wort);
+    fclose(fp);
+    }
 
 //ausgabe des Galgenmänchens nach je Fehleranzahl
 void ausgabeHangman(int versuchNummer)
 {
     switch(versuchNummer) {
-        case(0):printf(""); break; //default Wert
+        case(0):printf(""); break; //Anfangswert
         case(1):printf("\n   _______\n _/       \\_\n\n");break;     /*1 print Hangman*/
         case(2):printf("\n      |\n      |\n      |\n   ___|___\n _/       \\_\n\n"); break;    /*2 print Hangman*/
         case(3):printf("\n      |/\n      |\n      |\n   ___|___\n _/       \\_\n\n"); break;     /*3 print Hangman*/
@@ -124,6 +141,7 @@ char * zufaelligesWort(char *liste[])
   return woerterliste[nummer];
 }
 
+// Setzt den Buchstaben in die Erateneliste und gibt sie aus
 char * wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrolle ob Buchstabe richtig oder nicht
 {
     int laenge = strlen(wort);//länge des Wortes
@@ -152,12 +170,14 @@ char * wortRückgabe(char * wort, char buchstabe, char ertwortListe[]) //Kontrol
     return ertwortListe;
 }
 
+// speichert die Geratenenbuchstaben im Array
 char * buchstabenSpeicher(char buchstabe, char gerwortListe[])
 {
     gerwortListe[versuch - 1] = buchstabe;
     return gerwortListe;
 }
 
+// testet ob der User gewonnen hat
 int gewinnProbe(char liste[],int laenge)
 {
     for(int i = 0; i < laenge; i++)
@@ -170,6 +190,7 @@ int gewinnProbe(char liste[],int laenge)
     return 1;
 }
 
+// Gibt die Endnachricht aus jenachdem ob man gewonnen oder verloren hat
 void endNachricht(int ergebnis, FILE * fp, char * wort)
 {
     if(ergebnis == 1)
@@ -184,6 +205,7 @@ void endNachricht(int ergebnis, FILE * fp, char * wort)
     fprintf(fp, "Versuche: %d ; Wort: %s\n", versuch, wort);
 }
 
+// kontrolliert ob der eingegebene Buchstabe schon benutzt wurde
 bool buchstabenKontrolle(char buchstabe, char Liste[],int laenge)
 {
     for(int i = 0; i < laenge; i++)
