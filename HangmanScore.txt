@@ -1,0 +1,11 @@
+Versuche: 12 ; Wort: hallo
+Versuche: 12 ; Wort: hallo
+Versuche: 5 ; Wort: hallo
+Versuche: 5 ; Wort: hallo
+Versuche: 12 ; Wort: hallo
+Versuche: 16 ; Wort: schalter
+Versuche: 14 ; Wort: tier
+Versuche: 6 ; Wort: wurst
+Versuche: 6 ; Wort: koerper
+Versuche: 13 ; Wort: juni
+Versuche: 15 ; Wort: september
